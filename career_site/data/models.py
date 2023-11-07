@@ -4,7 +4,7 @@ from django.db import models
 # Create your models here.
 class LocationInfo(models.Model):
     id = models.AutoField(primary_key=True)
-    address = models.CharField()
+    address = models.CharField(max_length=200)
     geo_lat = models.FloatField()
     geo_alt = models.FloatField()
 
@@ -17,11 +17,11 @@ class LocationInfo(models.Model):
 
 class Company(models.Model):
     id = models.IntegerField(primary_key=True)
-    name = models.CharField()
+    name = models.CharField(max_length=200)
     num_employees = models.IntegerField(null=True)
     investment = models.IntegerField(null=True)
     revenue = models.IntegerField(null=True)
-    homepage = models.CharField(null=True)
+    homepage = models.CharField(max_length=200, null=True)
     loc_info_id = models.ForeignKey(LocationInfo, models.DO_NOTHING)
 
     # created_at = models.DateTimeField()
@@ -32,9 +32,9 @@ class Company(models.Model):
 
 class Job(models.Model):
     id = models.IntegerField(primary_key=True)
-    name = models.CharField()
+    name = models.CharField(max_length=200)
     company_id = models.ForeignKey(Company, models.DO_NOTHING)
-    work_type = models.CharField(null=True)
+    work_type = models.CharField(max_length=200, null=True)
     due_datetime = models.DateTimeField(default='2999-12-31')
     min_wage = models.IntegerField(null=True)
     max_wage = models.IntegerField(null=True)
@@ -51,7 +51,7 @@ class Job(models.Model):
 
 class Position(models.Model):
     id = models.AutoField(primary_key=True)
-    name = models.CharField()
+    name = models.CharField(max_length=200)
 
     # created_at = models.DateTimeField()
     # modified_at = models.DateTimeField()
@@ -62,7 +62,7 @@ class Position(models.Model):
 
 class Welfare(models.Model):
     id = models.AutoField(primary_key=True)
-    name = models.CharField()
+    name = models.CharField(max_length=200)
 
     # created_at = models.DateTimeField()
     # modified_at = models.DateTimeField()
@@ -73,7 +73,7 @@ class Welfare(models.Model):
 
 class TechStack(models.Model):
     id = models.AutoField(primary_key=True)
-    name = models.CharField()
+    name = models.CharField(max_length=200)
 
     # created_at = models.DateTimeField()
     # modified_at = models.DateTimeField()
