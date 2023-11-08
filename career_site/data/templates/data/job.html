@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>직무 검색</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+    </style>
+</head>
+<body>
+    <form action="#" method="GET">
+        {% csrf_token %}
+        {{ position_form.as_p }}
+        {{ job_form.as_p }}
+        {% if jobs %}
+        <table>
+            {% for job in jobs %}
+                <tr>{{ job.name }} - {{ job.min_experience }}년 - {{ job.min_wage }}</tr>
+            {% endfor %}
+        </table>
+        {% endif %}
+        <button type="submit">검색하기</button>
+    </form>
+</body>
+</html>
