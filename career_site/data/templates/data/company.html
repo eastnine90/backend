@@ -1,0 +1,17 @@
+<form action="." enctype="application/x-www-form-urlencoded" method="post">
+    <ol>
+        {{ form.as_ul }}
+    </ol>
+    {% csrf_token %}
+    <button type="submit">Search</button>
+
+    {% if companies %}
+    <table>
+        {% for company in companies %}
+        <tr>
+            <td>{{ company.name }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% endif %}
+</form>
