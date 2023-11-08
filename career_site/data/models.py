@@ -56,6 +56,9 @@ class Position(models.Model):
     # created_at = models.DateTimeField()
     # modified_at = models.DateTimeField()
 
+    def __str__(self):
+        return self.name
+
     class Meta:
         db_table = 'position'
 

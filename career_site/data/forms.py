@@ -8,7 +8,9 @@ class CompanyForm(forms.ModelForm):
         fields = ['num_employees', 'investment', 'revenue']
 
 
-class JobForm(forms.ModelForm):
+class JobSearchForm(forms.ModelForm):
+    position = forms.ModelChoiceField(queryset=Position.objects.all(), label='직무')
+
     min_experience_choice = [(i, f"{i}년 이상") if i > 0 else (i, "신입") for i in range(10)]
     min_experience = forms.ChoiceField(choices=min_experience_choice, label='경력')
 
@@ -17,12 +19,4 @@ class JobForm(forms.ModelForm):
 
     class Meta:
         model = Job
-        fields = ['min_experience', 'min_wage']
-
-
-class PositionForm(forms.ModelForm):
-    name = forms.ModelChoiceField(queryset=Position.objects.values_list('name'), label='직무')
-
-    class Meta:
-        model = Position
-        fields = ['name']
+        fields = ['position', 'min_experience', 'min_wage']
