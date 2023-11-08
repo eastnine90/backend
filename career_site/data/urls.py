@@ -20,5 +20,5 @@ from .views import *
 
 urlpatterns = [
     path('company/', company, name='company'),
-    #path('job/', views.job, name='job')
+    path('job/', job_search, name='job_search'),
 ]
