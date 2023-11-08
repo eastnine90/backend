@@ -15,12 +15,14 @@
 <body>
     <form action="#" method="GET">
         {% csrf_token %}
+        {{ position_form.as_p }}
+        {{ job_form.as_p }}
         {% if jobs %}
-        <ul>
+        <table>
             {% for job in jobs %}
-                <li>{{ job.name }} - {{ job.min_experience }}년 - {{ job.min_wage }}</li>
+                <tr>{{ job.name }} - {{ job.min_experience }}년 - {{ job.min_wage }}</tr>
             {% endfor %}
-        </ul>
+        </table>
         {% endif %}
         <button type="submit">검색하기</button>
     </form>
