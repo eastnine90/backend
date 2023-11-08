@@ -22,7 +22,7 @@ class Company(models.Model):
     investment = models.IntegerField(null=True)
     revenue = models.IntegerField(null=True)
     homepage = models.CharField(max_length=200, null=True)
-    loc_info_id = models.ForeignKey(LocationInfo, models.DO_NOTHING)
+    loc_info_id = models.ForeignKey(LocationInfo, models.DO_NOTHING, null=True)
 
     # created_at = models.DateTimeField()
     # modified_at = models.DateTimeField()
@@ -40,7 +40,7 @@ class Job(models.Model):
     max_wage = models.IntegerField(null=True)
     min_experience = models.IntegerField()
     max_experience = models.IntegerField()
-    loc_info_id = models.ForeignKey(LocationInfo, models.DO_NOTHING)
+    loc_info_id = models.ForeignKey(LocationInfo, models.DO_NOTHING, null=True)
 
     # created_at = models.DateTimeField()
     # modified_at = models.DateTimeField()
