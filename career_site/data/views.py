@@ -31,7 +31,7 @@ def job_search_api(request):
 
             target_position = get_object_or_404(Position, pk=position.id)
             job_position_mapping = JobPositionMapping.objects.filter(position_id=target_position.id)
-            jobs = Job.objects.filter(id__in=[jpm.job_id for jpm in job_position_mapping], min_wage__gte=min_wage,
+            jobs = Job.objects.filter(id__in=[jpm.job_id.id for jpm in job_position_mapping], min_wage__gte=min_wage,
                                       min_experience__gte=min_experience)
 
             job_serializer = JobSerializer(jobs, many=True)
