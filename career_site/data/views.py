@@ -1,6 +1,8 @@
-from django.shortcuts import render
-from .forms import CompanyForm, JobForm, PositionForm
-from .models import Company, Job, Position
+from django.shortcuts import render, get_object_or_404
+from django.http import JsonResponse
+from .serializers import JobSerializer
+from .forms import *
+from .models import *
 
 
 # Create your views here.
@@ -15,16 +17,24 @@ def company(request):
 
 
 def job_search(request):
-    job_form = JobForm()
-    position_form = PositionForm()
-    jobs = None
+    form = JobSearchForm()
+    return render(request, 'data/job.html', {'form': form})
 
-    if job_form.is_valid() and position_form.is_valid():
-        name = position_form.cleaned_data['name']
-        min_experience = job_form.cleaned_data['min_experience']
-        min_wage = job_form.cleaned_data['min_wage']
 
-        jobs = Position.objects.filter(name__icontains=name) & Job.objects.filter(min_experience__gte=min_experience,
-                                                                                  min_wage__gte=min_wage)
+def job_search_api(request):
+    if request.method == 'POST':
+        form = JobSearchForm(request.POST)
+        if form.is_valid():
+            position = form.cleaned_data['position']
+            min_experience = form.cleaned_data['min_experience']
+            min_wage = form.cleaned_data['min_wage']
 
-    return render(request, 'data/job.html', {'job_form': job_form, 'position_form': position_form, 'jobs': jobs})
+            target_position = get_object_or_404(Position, pk=position.id)
+            job_position_mapping = JobPositionMapping.objects.filter(position_id=target_position.id)
+            jobs = Job.objects.filter(id__in=[jpm.job_id for jpm in job_position_mapping], min_wage__gte=min_wage,
+                                      min_experience__gte=min_experience)
+
+            job_serializer = JobSerializer(jobs, many=True)
+            job_json = JsonResponse(job_serializer.data, safe=False)
+
+            return job_json
