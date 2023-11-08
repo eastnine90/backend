@@ -1,5 +1,5 @@
 from django import forms
-from .models import Company, Job
+from .models import Company, Job, Position
 
 
 class CompanyForm(forms.ModelForm):
@@ -15,8 +15,14 @@ class JobForm(forms.ModelForm):
     min_wage_choice = [(i * 1000, f"{str(i)[0]},{str(i)[1:]} 이상") for i in range(3000, 8000 + 1, 500)]
     min_wage = forms.ChoiceField(choices=min_wage_choice, label='연봉')
 
-    name = forms.ModelChoiceField(queryset=Job.objects.values_list('name'), label='직무')
-
     class Meta:
         model = Job
-        fields = ['name', 'min_experience', 'min_wage']
+        fields = ['min_experience', 'min_wage']
+
+
+class PositionForm(forms.ModelForm):
+    name = forms.ModelChoiceField(queryset=Position.objects.values_list('name'), label='직무')
+
+    class Meta:
+        model = Position
+        fields = ['name']
