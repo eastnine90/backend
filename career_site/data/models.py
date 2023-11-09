@@ -15,6 +15,34 @@ class LocationInfo(models.Model):
         db_table = 'location_info'
 
 
+class Welfare(models.Model):
+    id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=200)
+
+    # created_at = models.DateTimeField()
+    # modified_at = models.DateTimeField()
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        db_table = 'welfare'
+
+
+class TechStack(models.Model):
+    id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=200)
+
+    # created_at = models.DateTimeField()
+    # modified_at = models.DateTimeField()
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        db_table = 'tech_stack'
+
+
 class Company(models.Model):
     id = models.IntegerField(primary_key=True)
     name = models.CharField(max_length=200)
@@ -23,6 +51,8 @@ class Company(models.Model):
     revenue = models.IntegerField(null=True)
     homepage = models.CharField(max_length=200, null=True)
     loc_info_id = models.ForeignKey(LocationInfo, models.DO_NOTHING, null=True)
+    welfare = models.ManyToManyField(Welfare, through='CompanyWelfareMapping')
+    tech_stack = models.ManyToManyField(TechStack, through='CompanyTechMapping')
 
     # created_at = models.DateTimeField()
     # modified_at = models.DateTimeField()
@@ -61,28 +91,6 @@ class Position(models.Model):
 
     class Meta:
         db_table = 'position'
-
-
-class Welfare(models.Model):
-    id = models.AutoField(primary_key=True)
-    name = models.CharField(max_length=200)
-
-    # created_at = models.DateTimeField()
-    # modified_at = models.DateTimeField()
-
-    class Meta:
-        db_table = 'welfare'
-
-
-class TechStack(models.Model):
-    id = models.AutoField(primary_key=True)
-    name = models.CharField(max_length=200)
-
-    # created_at = models.DateTimeField()
-    # modified_at = models.DateTimeField()
-
-    class Meta:
-        db_table = 'tech_stack'
 
 
 class JobPositionMapping(models.Model):
