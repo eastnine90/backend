@@ -2,21 +2,69 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>기업 정보 조회</title>
+    <title>직무 기반 검색</title>
     <style>
         body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
+        }
+        #result {
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
         }
     </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!-- AJAX 요청에 필요한 CSRF 토큰 생성 -->
+    <script>
+        $(document).ready(function() {
+            var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
+            $.ajaxSetup({
+                beforeSend: function(xhr, settings) {
+                    if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
+                        xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                    }
+                }
+            });
+        });
+    </script>
 </head>
 <body>
-    <form action={% url 'job_search_api' %} method="POST">
+    <form id="job-search-form" action={% url 'job_search_api' %} method="POST">
         {% csrf_token %}
         {{ form.as_p }}
         <button type="submit">검색하기</button>
     </form>
+    <div id="result"></div>
+    <script>
+        $(document).ready(function() {
+            $('#job-search-form').on('submit', function(e) {
+                e.preventDefault();
+                $.ajax({
+                    url: $(this).attr('action'),
+                    type: $(this).attr('method'),
+                    data: $(this).serialize(),
+                    success: function(data) {
+                        $.ajax({
+                            url: 'create_img',  <!-- 시각화 함수를 처리하는 URL -->
+                            type: 'POST',
+                            data: data,
+                            success: function(img_data) {
+                                <!-- 서버로부터 받아온 이미지 URL로 img 태그 생성 -->
+                                var img = '<img src="' + img_data.image_url + '">';
+                                <!-- 생성한 img 태그를 HTML 문서에 추가 -->
+                                $('#result').html(img);
+                                <!-- form 초기화 -->
+                                $('#job-search-form')[0].reset();
+                            }
+                        });
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 </html>
