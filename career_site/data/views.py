@@ -22,7 +22,8 @@ def company(request):
 
             # 임시로 Json리턴하도록 설정
             if form.cleaned_data.get('get_json'):
-                return JsonResponse(CompanySerializer(companies, many=True).data, safe=False, json_dumps_params={'ensure_ascii': False})
+                return JsonResponse(CompanySerializer(companies, many=True).data, safe=False,
+                                    json_dumps_params={'ensure_ascii': False})
 
     return render(request, 'data/company.html', {'form': form, 'companies': companies})
 
@@ -50,11 +51,17 @@ def job_search_api(request):
 
         return json_response
 
-
-
         # JSON 파일로 디스크에 저장
         # serialized_data = job_serializer.data
         # with open('PATH/refined_job_api.json', 'w', encoding='utf-8') as f:
         #     json.dump(serialized_data, f, ensure_ascii=False, indent=4)
 
         # return JsonResponse(serialized_data, safe=False)
+
+def create_img(request): # 테스트 함수
+    if request.method == 'POST':
+        # 이곳에서 시각화 함수 처리
+        pass
+    test_url = "https://source.unsplash.com/user/c_v_r/1900×800"
+    return JsonResponse({'image_url': test_url})
+
