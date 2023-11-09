@@ -58,10 +58,10 @@ def job_search_api(request):
 
         # return JsonResponse(serialized_data, safe=False)
 
-def create_img(request): # 테스트 함수
+
+def create_img(request):  # 테스트 함수
     if request.method == 'POST':
-        # 이곳에서 시각화 함수 처리
+        # 이곳에서 시각화 로직 실행
         pass
     test_url = "https://source.unsplash.com/user/c_v_r/1900×800"
     return JsonResponse({'image_url': test_url})
-
