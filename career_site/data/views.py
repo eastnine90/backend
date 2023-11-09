@@ -36,7 +36,7 @@ def job_search_api(request):
                                   min_experience__gte=min_experience)
 
         job_serializer = JobSerializer(jobs, many=True)
-        json_response = JsonResponse(job_serializer.data, safe=False)
+        json_response = JsonResponse(job_serializer.data, safe=False, json_dumps_params={'ensure_ascii': False})
 
         return json_response
 
