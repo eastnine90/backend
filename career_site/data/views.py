@@ -6,6 +6,7 @@ from .models import *
 
 
 # Create your views here.
+
 def company(request):
     form = CompanyForm()
     companies = None
@@ -22,19 +23,28 @@ def job_search(request):
 
 
 def job_search_api(request):
-    if request.method == 'POST':
-        form = JobSearchForm(request.POST)
-        if form.is_valid():
-            position = form.cleaned_data['position']
-            min_experience = form.cleaned_data['min_experience']
-            min_wage = form.cleaned_data['min_wage']
+    form = JobSearchForm(request.POST)
+    if form.is_valid():
+        position = form.cleaned_data['position']
+        min_experience = form.cleaned_data['min_experience']
+        min_wage = form.cleaned_data['min_wage']
 
-            target_position = get_object_or_404(Position, pk=position.id)
-            job_position_mapping = JobPositionMapping.objects.filter(position_id=target_position.id)
-            jobs = Job.objects.filter(id__in=[mapping.job_id.id for mapping in job_position_mapping], min_wage__gte=min_wage,
-                                      min_experience__gte=min_experience)
+        target_position = get_object_or_404(Position, pk=position.id)
+        job_position_mapping = JobPositionMapping.objects.filter(position_id=target_position.id)
+        jobs = Job.objects.filter(id__in=[mapping.job_id.id for mapping in job_position_mapping],
+                                  min_wage__gte=min_wage,
+                                  min_experience__gte=min_experience)
 
-            job_serializer = JobSerializer(jobs, many=True)
-            job_json = JsonResponse(job_serializer.data, safe=False)
+        job_serializer = JobSerializer(jobs, many=True)
+        json_response = JsonResponse(job_serializer.data, safe=False)
 
-            return job_json
+        return json_response
+
+
+
+        # JSON 파일로 디스크에 저장
+        # serialized_data = job_serializer.data
+        # with open('PATH/refined_job_api.json', 'w', encoding='utf-8') as f:
+        #     json.dump(serialized_data, f, ensure_ascii=False, indent=4)
+
+        # return JsonResponse(serialized_data, safe=False)
