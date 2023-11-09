@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import JsonResponse
-from .serializers import JobSerializer
+from .serializers import JobSerializer, CompanySerializer
 from .forms import *
 from .models import *
 
@@ -8,11 +8,21 @@ from .models import *
 # Create your views here.
 
 def company(request):
-    form = CompanyForm()
+    form = CompanyForm(request.POST or None)
     companies = None
+    if request.method == 'POST':
+        form = CompanyForm(request.POST)
 
-    if form.is_valid():
-        companies = Company.objects.filter(num_employees__gte=form.cleaned_data.get('num_employees'))
+        if form.is_valid():
+            companies = Company.objects.filter(
+                num_employees__gte=form.cleaned_data.get('num_employees'),
+                investment__gte=form.cleaned_data.get('investment'),
+                revenue__gte=form.cleaned_data.get('revenue')
+            )
+
+            # 임시로 Json리턴하도록 설정
+            if form.cleaned_data.get('get_json'):
+                return JsonResponse(CompanySerializer(companies, many=True).data, safe=False, json_dumps_params={'ensure_ascii': False})
 
     return render(request, 'data/company.html', {'form': form, 'companies': companies})
 

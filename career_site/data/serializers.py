@@ -53,11 +53,13 @@ class CompanyWelfareMappingSerializer(serializers.ModelSerializer):
 class CompanySerializer(serializers.ModelSerializer):
     tech_stack = serializers.SerializerMethodField()
     welfare = serializers.SerializerMethodField()
+    loc_info = LocationInfoSerializer(source='loc_info_id', read_only=True)
 
     class Meta:
         model = Company
         fields = ['name', 'num_employees', 'investment', 'revenue', 'homepage', 'tech_stack',
-                  'welfare']
+                  'welfare', 'loc_info']
+        depth = 1
 
     def get_tech_stack(self, obj):
         job_tech_mapping = CompanyTechMapping.objects.filter(company_id=obj.id)
