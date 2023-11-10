@@ -66,4 +66,4 @@ jobs:
         with:
           app-name: 'prgrms-career-visualization'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_8AF6E94986914CBEAEFC42FAC2F72786 }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_F277F4E126654DD88C6128347C05173A }}
